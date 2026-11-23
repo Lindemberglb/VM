@@ -1,0 +1,71 @@
+Script started on 2026-11-23 13:20:03-03:00 [TERM="xterm-256color" TTY="/dev/pts/6" COLUMNS="206" LINES="9"]
+[?2004h]0;guitolin@guitolinnote: ~/gllb[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ make clea[K[K[K[K[K
+[?2004lgcc -std=c11 -Wall -Wextra -Wpedantic -pthread main.c -o vm -pthread
+[?2004h]0;guitolin@guitolinnote: ~/gllb[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ make clean
+[?2004lrm -f vm
+[?2004h]0;guitolin@guitolinnote: ~/gllb[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ git add .GITI[K[K[K[K[K[K .
+[?2004l[?2004h]0;guitolin@guitolinnote: ~/gllb[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ GIT[K[K[Kgit commit -m "adicionei a estrutura inicial[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[Kdesn[Kenvolvi o innício[K[K[K[K[Kício do [K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[Kfiz o a[K[K arquivo de[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K"define[Ki [K[K[K[K[K[K[Kfiz [K[K[K[Kdefinicçã[K[K[Kção inicial do vm e imlpe[K[K[Kplmentação makefile"dmakefile"omakefile" makefile"[C[C[C[C[C[C[C[C[C[1P[C[1@e[1@m[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C
+[?2004l[main 4ddca2d] definição inicial do vm e implementação do makefile
+ 4 files changed, 35 insertions(+)
+ create mode 100644 evidencias.log
+ create mode 100644 makefile
+ create mode 100644 vm.h
+[?2004h]0;guitolin@guitolinnote: ~/gllb[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ git push
+[?2004lEnumerating objects: 7, done.
+Counting objects:  14% (1/7)Counting objects:  28% (2/7)Counting objects:  42% (3/7)Counting objects:  57% (4/7)Counting objects:  71% (5/7)Counting objects:  85% (6/7)Counting objects: 100% (7/7)Counting objects: 100% (7/7), done.
+Delta compression using up to 8 threads
+Compressing objects:  25% (1/4)Compressing objects:  50% (2/4)Compressing objects:  75% (3/4)Compressing objects: 100% (4/4)Compressing objects: 100% (4/4), done.
+Writing objects:  20% (1/5)Writing objects:  40% (2/5)Writing objects:  60% (3/5)Writing objects:  80% (4/5)Writing objects: 100% (5/5)Writing objects: 100% (5/5), 728 bytes | 242.00 KiB/s, done.
+Total 5 (delta 0), reused 0 (delta 0), pack-reused 0
+To https://github.com/Lindemberglb/VM.git
+   4d1b512..4ddca2d  main -> main
+[?2004h]0;guitolin@guitolinnote: ~/gllb[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ make clean
+[?2004lrm -f vm
+[?2004h]0;guitolin@guitolinnote: ~/gllb[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ make
+[?2004lgcc -std=c11 -Wall -Wextra -Wpedantic -pthread main.c -o vm -pthread
+[?2004h]0;guitolin@guitolinnote: ~/gllb[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ [7m./vm addresses.txt lru fifo[27m./vm addresses.txt lru fifo
+[?2004l[?2004h]0;guitolin@guitolinnote: ~/gllb[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ [7m./vm[27m./vm
+[?2004lUso: ./vm <arquivo_de_enderecos> <fifo|lru para paginas> <fifo|lru para TLB>
+[?2004h]0;guitolin@guitolinnote: ~/gllb[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ git status
+[?2004lOn branch main
+Your branch is up to date with 'origin/main'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	[31mmodified:   .gitignore[m
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	[31mmain.c[m
+
+no changes added to commit (use "git add" and/or "git commit -a")
+[?2004h]0;guitolin@guitolinnote: ~/gllb[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ git add main.c .gitignore[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[Kmake clean
+[?2004lrm -f vm
+[?2004h]0;guitolin@guitolinnote: ~/gllb[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ git add main.c .gitignore
+[?2004l[?2004h]0;guitolin@guitolinnote: ~/gllb[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ git commit -m "atualizei o gitignore e [7mimplementei a validacao dos argumentos e do arquivo de enderecos[27mimplementei a validacao dos argumentos e do arquivo de enderecos"[1P[1P[1P[1@a[1@ç[1@a[1P[1@ã[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1P"[1P"[1P"ç"o"s"[C
+[?2004l[main d192d43] atualizei o gitignore e implementei a validação dos argumentos e do arquivo de endereços
+ 2 files changed, 149 insertions(+)
+ create mode 100644 main.c
+[?2004h]0;guitolin@guitolinnote: ~/gllb[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ it [K[K[Kgit push
+[?2004lEnumerating objects: 6, done.
+Counting objects:  16% (1/6)Counting objects:  33% (2/6)Counting objects:  50% (3/6)Counting objects:  66% (4/6)Counting objects:  83% (5/6)Counting objects: 100% (6/6)Counting objects: 100% (6/6), done.
+Delta compression using up to 8 threads
+Compressing objects:  33% (1/3)Compressing objects:  66% (2/3)Compressing objects: 100% (3/3)Compressing objects: 100% (3/3), done.
+Writing objects:  25% (1/4)Writing objects:  50% (2/4)Writing objects:  75% (3/4)Writing objects: 100% (4/4)Writing objects: 100% (4/4), 1.64 KiB | 1.64 MiB/s, done.
+Total 4 (delta 0), reused 0 (delta 0), pack-reused 0
+To https://github.com/Lindemberglb/VM.git
+   4ddca2d..d192d43  main -> main
+[?2004h]0;guitolin@guitolinnote: ~/gllb[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ make
+[?2004lgcc -std=c11 -Wall -Wextra -Wpedantic -pthread main.c vm.c -o vm -pthread
+[?2004h]0;guitolin@guitolinnote: ~/gllb[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ [7m./vm addresses.txt lru fifo[27m./vm addresses.txt lru fifo
+[?2004l[?2004h]0;guitolin@guitolinnote: ~/gllb[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ [7mmv BACKING_STORE.bin BACKING_STORE_backup.bin[27m
+[7m./vm addresses.txt lru fifo[27m[A]0;guitolin@guitolinnote: ~/gllb[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ mv BACKING_STORE.bin BACKING_STORE_backup.bin
+./vm addresses.txt lru fifo
+[?2004lErro: nao foi possivel abrir o backing store 'BACKING_STORE.bin'.
+[?2004h]0;guitolin@guitolinnote: ~/gllb[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ [7mmv BACKING_STORE_backup.bin BACKING_STORE.bin[27m[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cmv BACKING_STORE_backup.bin BACKING_STORE.bin
+[?2004l[?2004h]0;guitolin@guitolinnote: ~/gllb[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ [7m./vm addresses.txt lru fifo[27m./vm addresses.txt lru fifo
+[?2004l][?2004h]0;guitolin@guitolinnote: ~/gllb[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ ][Kexit
+[?2004lexit
+
+Script done on 2026-11-23 13:55:43-03:00 [COMMAND_EXIT_CODE="0"]

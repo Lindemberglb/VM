@@ -1,10 +1,9 @@
-
 CC = gcc
 CFLAGS = -std=c11 -Wall -Wextra -Wpedantic -pthread
 LDFLAGS = -pthread
 
 TARGET = vm
-SOURCES = main.c
+SOURCES = main.c vm.c
 HEADERS = vm.h
 
 all: $(TARGET)
@@ -16,3 +15,4 @@ clean:
 	rm -f $(TARGET)
 
 .PHONY: all clean
+

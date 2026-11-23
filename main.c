@@ -111,8 +111,7 @@ static int load_addresses(const char *filename, int **addresses, size_t *count){
 
 int main(int argc, char *argv[]){
     if (argc != 4) {
-        fprintf(stderr,
-                "Uso: %s <arquivo_de_enderecos> <fifo|lru para paginas> <fifo|lru para TLB>\n", argv[0]);
+        fprintf(stderr, "Uso: %s <arquivo_de_enderecos> <fifo|lru para paginas> <fifo|lru para TLB>\n", argv[0]);
         return EXIT_FAILURE;
     }
 
@@ -133,6 +132,13 @@ int main(int argc, char *argv[]){
     size_t address_count = 0;
 
     if (!load_addresses(argv[1], &addresses, &address_count)) {
+        return EXIT_FAILURE;
+    }
+
+    VirtualMemory memory;
+
+    if (!vm_initialize(&memory, BACKING_STORE_FILE)) {
+        free(addresses);
         return EXIT_FAILURE;
     }
 
