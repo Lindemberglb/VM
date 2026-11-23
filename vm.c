@@ -76,14 +76,40 @@ static int select_fifo_frame(const VirtualMemory *memory){
     return oldest_frame;
 }
 
+static int select_lru_frame(const VirtualMemory *memory){
+    int least_recent_frame = -1;
+    size_t oldest_access = (size_t)-1;
+
+    for (int frame = 0; frame < NUM_FRAMES; frame++) {
+        int page_number = memory->frame_to_page[frame];
+
+        if (page_number < 0 || page_number >= PAGE_TABLE_SIZE) {
+            return -1;
+        }
+
+        const PageTableEntry *entry = &memory->page_table[page_number];
+
+        if (!entry->valid || entry->frame_number != frame) {
+            return -1;
+        }
+
+        if (least_recent_frame == -1 || entry->last_used < oldest_access) {
+            least_recent_frame = frame;
+            oldest_access = entry->last_used;
+        }
+    }
+
+    return least_recent_frame;
+}
+
 int vm_translate(VirtualMemory *memory, int logical_address, ReplacementAlgorithm page_algorithm, TranslationResult *result){
     if (memory == NULL || result == NULL) {
         fprintf(stderr, "Erro: parametros invalidos para traducao.\n");
         return 0;
     }
 
-    if (page_algorithm != FIFO) {
-        fprintf(stderr,"Erro: algoritmo de substituicao ainda nao implementado nesta etapa.\n");
+    if (page_algorithm != FIFO && page_algorithm != LRU) {
+        fprintf(stderr, "Erro: algoritmo de substituicao invalido.\n");
         return 0;
     }
 
@@ -103,7 +129,8 @@ int vm_translate(VirtualMemory *memory, int logical_address, ReplacementAlgorith
     if (page_entry->valid) {
         frame_number = page_entry->frame_number;
 
-        if (frame_number < 0 || frame_number >= NUM_FRAMES || memory->frame_to_page[frame_number] != page_number) {
+        if (frame_number < 0 || frame_number >= NUM_FRAMES ||
+            memory->frame_to_page[frame_number] != page_number) {
             fprintf(stderr, "Erro: mapeamento inconsistente na tabela de paginas.\n");
             return 0;
         }
@@ -112,7 +139,11 @@ int vm_translate(VirtualMemory *memory, int logical_address, ReplacementAlgorith
             frame_number = (int)memory->next_free_frame;
             memory->next_free_frame++;
         } else {
-            frame_number = select_fifo_frame(memory);
+            if (page_algorithm == FIFO) {
+                frame_number = select_fifo_frame(memory);
+            } else {
+                frame_number = select_lru_frame(memory);
+            }
 
             if (frame_number < 0) {
                 fprintf(stderr,"Erro: nao foi possivel selecionar um quadro para substituicao.\n");
@@ -128,7 +159,11 @@ int vm_translate(VirtualMemory *memory, int logical_address, ReplacementAlgorith
             old_entry->last_used = 0;
         }
 
-        memcpy(memory->physical_memory[frame_number], memory->backing_store + page_number * PAGE_SIZE, PAGE_SIZE);
+        memcpy(
+            memory->physical_memory[frame_number],
+            memory->backing_store + page_number * PAGE_SIZE,
+            PAGE_SIZE
+        );
 
         memory->frame_to_page[frame_number] = page_number;
 
@@ -156,3 +191,4 @@ int vm_translate(VirtualMemory *memory, int logical_address, ReplacementAlgorith
 
     return 1;
 }
+
