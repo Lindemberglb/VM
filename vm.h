@@ -3,6 +3,7 @@
 #define VM_H
 
 #include <stddef.h>
+#include <stdint.h>
 
 #define PAGE_SIZE 256
 #define NUM_FRAMES 128
@@ -29,9 +30,25 @@ typedef struct {
     PageTableEntry page_table[PAGE_TABLE_SIZE];
     int frame_to_page[NUM_FRAMES];
     size_t next_free_frame;
+    size_t access_counter;
+    size_t page_faults;
 } VirtualMemory;
+
+typedef struct {
+    int page_number;
+    int offset;
+    int frame_number;
+    int physical_address;
+    int8_t value;
+    int page_fault;
+} TranslationResult;
 
 int vm_initialize(VirtualMemory *memory, const char *backing_store_path);
 
-#endif
+int vm_translate(
+    VirtualMemory *memory,
+    int logical_address,
+    TranslationResult *result
+);
 
+#endif

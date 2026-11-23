@@ -69,3 +69,273 @@ To https://github.com/Lindemberglb/VM.git
 [?2004lexit
 
 Script done on 2026-11-23 13:55:43-03:00 [COMMAND_EXIT_CODE="0"]
+Script started on 2026-11-23 13:56:03-03:00 [TERM="xterm-256color" TTY="/dev/pts/6" COLUMNS="206" LINES="9"]
+[?2004h]0;guitolin@guitolinnote: ~/gllb[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ make clean
+[?2004lrm -f vm
+[?2004h]0;guitolin@guitolinnote: ~/gllb[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ git add evidencias.log main.c makefile vm.c vm.h[K[K[K[Kvm.h
+[?2004l[?2004h]0;guitolin@guitolinnote: ~/gllb[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ git commiot [K[K[K[Kit -m "[7mimplementei a estrutura da memoria virtual e o carregamento do backing store[27m[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[Cimplementei a estrutura da memoria virtual e o carregamento do backing store[1P[1P[1P[1@ó[1@r[1@i[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1P[1P[1P[1P[1P[1P[1P[1P[1P[1P[1P[1P[1P[1P[1@a[C[1@ [1@p[1@a[1@r[1@t[1@e[C[1@ [1@d[1@e[C[1@ [1@c[1@a[1@r[1@r[1@e[1@g[1@a[1@m[1@n[1@t[1@o[1P[1P[1P[1@e[1@n[1@t[1@o[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C"
+[?2004l[main 9a18f13] implementei a estrutura da memória virtual e a parte de carregamento do backing store
+ 5 files changed, 153 insertions(+), 4 deletions(-)
+ create mode 100644 vm.c
+[?2004h]0;guitolin@guitolinnote: ~/gllb[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ git push
+[?2004lEnumerating objects: 12, done.
+Counting objects:   8% (1/12)Counting objects:  16% (2/12)Counting objects:  25% (3/12)Counting objects:  33% (4/12)Counting objects:  41% (5/12)Counting objects:  50% (6/12)Counting objects:  58% (7/12)Counting objects:  66% (8/12)Counting objects:  75% (9/12)Counting objects:  83% (10/12)Counting objects:  91% (11/12)Counting objects: 100% (12/12)Counting objects: 100% (12/12), done.
+Delta compression using up to 8 threads
+Compressing objects:  14% (1/7)Compressing objects:  28% (2/7)Compressing objects:  42% (3/7)Compressing objects:  57% (4/7)Compressing objects:  71% (5/7)Compressing objects:  85% (6/7)Compressing objects: 100% (7/7)Compressing objects: 100% (7/7), done.
+Writing objects:  14% (1/7)Writing objects:  28% (2/7)Writing objects:  42% (3/7)Writing objects:  57% (4/7)Writing objects:  71% (5/7)Writing objects:  85% (6/7)Writing objects: 100% (7/7)Writing objects: 100% (7/7), 3.12 KiB | 799.00 KiB/s, done.
+Total 7 (delta 2), reused 0 (delta 0), pack-reused 0
+remote: Resolving deltas:   0% (0/2)[Kremote: Resolving deltas:  50% (1/2)[Kremote: Resolving deltas: 100% (2/2)[Kremote: Resolving deltas: 100% (2/2), completed with 2 local objects.[K
+To https://github.com/Lindemberglb/VM.git
+   d192d43..9a18f13  main -> main
+[?2004h]0;guitolin@guitolinnote: ~/gllb[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ git ststua[K[K[K[Katus
+[?2004lOn branch main
+Your branch is up to date with 'origin/main'.
+
+nothing to commit, working tree clean
+[?2004h]0;guitolin@guitolinnote: ~/gllb[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ ls -l
+[?2004ltotal 160
+-rw-r--r-- 1 guitolin guitolin 65536 Nov 23 13:33 BACKING_STORE.bin
+-rw-r--r-- 1 guitolin guitolin     0 Nov 23 12:22 README.MD
+-rw-r--r-- 1 guitolin guitolin  6831 Nov 23 13:33 addresses.txt
+-rw-r--r-- 1 guitolin guitolin 64583 Nov 23 13:33 correct.txt
+-rw-r--r-- 1 guitolin guitolin  7436 Nov 23 13:55 evidencias.log
+-rw-r--r-- 1 guitolin guitolin  4037 Nov 23 13:53 main.c
+-rw-r--r-- 1 guitolin guitolin   277 Nov 23 13:50 makefile
+-rw-r--r-- 1 guitolin guitolin  1524 Nov 23 13:46 vm.c
+-rw-r--r-- 1 guitolin guitolin   738 Nov 23 13:45 vm.h
+[?2004h]0;guitolin@guitolinnote: ~/gllb[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ [K]0;guitolin@guitolinnote: ~/gllb[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ [K]0;guitolin@guitolinnote: ~/gllb[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ [K]0;guitolin@guitolinnote: ~/gllb[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ [K]0;guitolin@guitolinnote: ~/gllb[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ ls
+[?2004lBACKING_STORE.bin  README.MD  addresses.txt  correct.txt  evidencias.log  main.c  makefile  vm.c  vm.h
+[?2004h]0;guitolin@guitolinnote: ~/gllb[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ [K]0;guitolin@guitolinnote: ~/gllb[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ [K]0;guitolin@guitolinnote: ~/gllb[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ [K]0;guitolin@guitolinnote: ~/gllb[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ [K]0;guitolin@guitolinnote: ~/gllb[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ [K]0;guitolin@guitolinnote: ~/gllb[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ [K]0;guitolin@guitolinnote: ~/gllb[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ [K]0;guitolin@guitolinnote: ~/gllb[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ [K]0;guitolin@guitolinnote: ~/gllb[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ make
+[?2004lgcc -std=c11 -Wall -Wextra -Wpedantic -pthread main.c vm.c -o vm -pthread
+m[?2004h]0;guitolin@guitolinnote: ~/gllb[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ make cke[K[Klean
+[?2004lrm -f vm
+[?2004h]0;guitolin@guitolinnote: ~/gllb[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ make
+[?2004lgcc -std=c11 -Wall -Wextra -Wpedantic -pthread main.c vm.c -o vm -pthread
+[?2004h]0;guitolin@guitolinnote: ~/gllb[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ [7m./vm addresses.txt lru fifo[27m./vm addresses.txt lru fifo
+[?2004l[?2004h]0;guitolin@guitolinnote: ~/gllb[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ [7mgit diff --check[27mgit diff --check
+[?2004l[?1h=evidencias.log:73: trailing whitespace.[m
+[32m+[m[32muitolin@guitolinnote: ~/gllb[7m^G[27m[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ make clean[m[41m[7m^M[27m[m[m
+evidencias.log:74: trailing whitespace.[m
+[32m+[m[32m[7m^M[27mrm -f vm[m[41m[7m^M[27m[m[m
+evidencias.log:75: trailing whitespace.[m
+[32m+[m[32muitolin@guitolinnote: ~/gllb[7m^G[27m[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ git add evidencias.log main.c makefile vm.c vm.h[m[41m[7m^M[27m[m[m
+evidencias.log:76: trailing whitespace.[m
+[32m+[m[32m[7m^M[27muitolin@guitolinnote: ~/gllb[7m^G[27m[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ git commit -m "[7mimplementei a estrutura da memoria virtual e o carregamento do backing store[27m[7m^M[27mimplementei a estrutura da memoria virtual e o carr[m [32m[m[32m[01;32m[00m[01;34m[00mi[7m[27m[7m^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H[27mó[7m^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H[27mapartedecarr[m [32m[m[32m[01;32m[00m[01;34m[00mi[7m[27móapdcegamento[7m^G^G^G^G^G^G^G^G[27m"[m[41m[7m^M[27m[m[m
+evidencias.log:77: trailing whitespace.[m
+[32m+[m[32m[7m^M[27m[main 9a18f13] implementei a estrutura da memória virtual e a parte de carregamento do backing store[m[41m[7m^M[27m[m[m
+evidencias.log:78: trailing whitespace.[m
+:[K[H[2J[H[H[2J[Hevidencias.log:73: trailing whitespace.[m
+[32m+[m[32muitolin@guitolinnote: ~/gllb[7m^G[27m[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ make clean[m[41m[7m^M[27m[m[m
+evidencias.log:74: trailing whitespace.[m
+[32m+[m[32m[7m^M[27mrm -f vm[m[41m[7m^M[27m[m[m
+evidencias.log:75: trailing whitespace.[m
+[32m+[m[32muitolin@guitolinnote: ~/gllb[7m^G[27m[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ git add evidencias.log main.c makefile vm.c vm.h[m[41m[7m^M[27m[m[m
+evidencias.log:76: trailing whitespace.[m
+[32m+[m[32m[7m^M[27muitolin@guitolinnote: ~/gllb[7m^G[27m[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ git commit -m "[7mimplementei a estrutura da memoria virtual e o carregamento do backing store[27m[7m^M[27mimplementei a estrutura da memoria virtual e o carr[m [32m[m[32m[01;32m[00m[01;34m[00mi[7m[27m[7m^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H[27mó[7m^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H[27mapartedecarr[m [32m[m[32m[01;32m[00m[01;34m[00mi[7m[27móapdcegamento[7m^G^G^G^G^G^G^G^G[27m"[m[41m[7m^M[27m[m[m
+evidencias.log:77: trailing whitespace.[m
+[32m+[m[32m[7m^M[27m[main 9a18f13] implementei a estrutura da memória virtual e a parte de carregamento do backing store[m[41m[7m^M[27m[m[m
+evidencias.log:78: trailing whitespace.[m
+:[K[K[K:[K[K:[K[K[7mNo next tag  (press RETURN)[27m[14;1H[K[K:[K[K[32m+[m[32m 5 files changed, 153 insertions(+), 4 deletions(-)[m[41m[7m^M[27m[m[m
+evidencias.log:79: trailing whitespace.[m
+[32m+[m[32m create mode 100644 vm.c[m[41m[7m^M[27m[m[m
+evidencias.log:80: trailing whitespace.[m
+[32m+[m[32muitolin@guitolinnote: ~/gllb[7m^G[27m[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ git push[m[41m[7m^M[27m[m[m
+evidencias.log:81: trailing whitespace.[m
+[32m+[m[32m[7m^M[27mEnumerating objects: 12, done.[m[41m[7m^M[27m[m[m
+:[K[K:[K[Kevidencias.log:82: trailing whitespace.[m
+[32m+[m[32mCounting objects:   8% (1/12)[7m^M[27mCounting objects:  16% (2/12)[7m^M[27mCounting objects:  25% (3/12)[7m^M[27mCounting objects:  33% (4/12)[7m^M[27mCounting objects:  41% (5/12)[7m^M[27mCounting objects:  50% (6/12)[7m^M[27mCounting objects:  [m [32m[m[32m58% (7/12)[7m^M[27mCounting objects:  66% (8/12)[7m^M[27mCounting objects:  75% (9/12)[7m^M[27mCounting objects:  83% (10/12)[7m^M[27mCounting objects:  91% (11/12)[7m^M[27mCounting objects: 100% (12/12)[7m^M[27mCounting objects: 100% (12/12), done[m [32m[m[32m.[m[41m[7m^M[27m[m[m
+evidencias.log:83: trailing whitespace.[m
+[32m+[m[32mDelta compression using up to 8 threads[m[41m[7m^M[27m[m[m
+evidencias.log:84: trailing whitespace.[m
+[32m+[m[32mCompressing objects:  14% (1/7)[7m^M[27mCompressing objects:  28% (2/7)[7m^M[27mCompressing objects:  42% (3/7)[7m^M[27mCompressing objects:  57% (4/7)[7m^M[27mCompressing objects:  71% (5/7)[7m^M[27mCompressing objects:  85% (6/7)[7m^M[27mCompres[m [32m[m[32msing objects: 100% (7/7)[7m^M[27mCompressing objects: 100% (7/7), done.[m[41m[7m^M[27m[m[m
+evidencias.log:85: trailing whitespace.[m
+[32m+[m[32mWriting objects:  14% (1/7)[7m^M[27mWriting objects:  28% (2/7)[7m^M[27mWriting objects:  42% (3/7)[7m^M[27mWriting objects:  57% (4/7)[7m^M[27mWriting objects:  71% (5/7)[7m^M[27mWriting objects:  85% (6/7)[7m^M[27mWriting objects: 100% (7/7)[7m^M[27mWr[m [32m[m[32miting objects: 100% (7/7), 3.12 KiB | 799.00 KiB/s, done.[m[41m[7m^M[27m[m[m
+evidencias.log:86: trailing whitespace.[m
+:[K[K[32m+[m[32mTotal 7 (delta 2), reused 0 (delta 0), pack-reused 0[m[41m[7m^M[27m[m[m
+evidencias.log:87: trailing whitespace.[m
+[32m+[m[32mremote: Resolving deltas:   0% (0/2)[7m^M[27mremote: Resolving deltas:  50% (1/2)[7m^M[27mremote: Resolving deltas: 100% (2/2)[7m^M[27mremote: Resolving deltas: 100% (2/2), completed with 2 local objects.[m[41m[7m^M[27m[m[m
+evidencias.log:88: trailing whitespace.[m
+[32m+[m[32mTo https://github.com/Lindemberglb/VM.git[m[41m[7m^M[27m[m[m
+evidencias.log:89: trailing whitespace.[m
+[32m+[m[32m   d192d43..9a18f13  main -> main[m[41m[7m^M[27m[m[m
+evidencias.log:90: trailing whitespace.[m
+[32m+[m[32muitolin@guitolinnote: ~/gllb[7m^G[27m[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ git status[m[41m[7m^M[27m[m[m
+evidencias.log:91: trailing whitespace.[m
+[32m+[m[32m[7m^M[27mOn branch main[m[41m[7m^M[27m[m[m
+evidencias.log:92: trailing whitespace.[m
+[32m+[m[32mYour branch is up to date with 'origin/main'.[m[41m[7m^M[27m[m[m
+:[K[Kevidencias.log:93: trailing whitespace.[m
+[32m+[m[41m[7m^M[27m[m[m
+evidencias.log:94: trailing whitespace.[m
+[32m+[m[32mnothing to commit, working tree clean[m[41m[7m^M[27m[m[m
+evidencias.log:95: trailing whitespace.[m
+[32m+[m[32muitolin@guitolinnote: ~/gllb[7m^G[27m[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ ls -l[m[41m[7m^M[27m[m[m
+evidencias.log:96: trailing whitespace.[m
+[32m+[m[32m[7m^M[27mtotal 160[m[41m[7m^M[27m[m[m
+evidencias.log:97: trailing whitespace.[m
+[32m+[m[32m-rw-r--r-- 1 guitolin guitolin 65536 Nov 23 13:33 BACKING_STORE.bin[m[41m[7m^M[27m[m[m
+evidencias.log:98: trailing whitespace.[m
+[32m+[m[32m-rw-r--r-- 1 guitolin guitolin     0 Nov 23 12:22 README.MD[m[41m[7m^M[27m[m[m
+evidencias.log:99: trailing whitespace.[m
+:[K[K-[K--[Kcc[Khh[K--[Kcc[Khh[Koo[Kpp[K--[Kll[Koo[Knn[Kgg[K--[Kll[Kii[Knn[Kee[Kss[K[7mChop long lines  (press RETURN)[27m[14;1H[K[H[2J[Hevidencias.log:93: trailing whitespace.[m
+[32m+[m[41m[7m^M[27m[m[m
+evidencias.log:94: trailing whitespace.[m
+[32m+[m[32mnothing to commit, working tree clean[m[41m[7m^M[27m[m[m
+evidencias.log:95: trailing whitespace.[m
+[32m+[m[32muitolin@guitolinnote: ~/gllb[7m^G[27m[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ ls -l[m[41m[7m^M[27m[m[m
+evidencias.log:96: trailing whitespace.[m
+[32m+[m[32m[7m^M[27mtotal 160[m[41m[7m^M[27m[m[m
+evidencias.log:97: trailing whitespace.[m
+[32m+[m[32m-rw-r--r-- 1 guitolin guitolin 65536 Nov 23 13:33 BACKING_STORE.bin[m[41m[7m^M[27m[m[m
+evidencias.log:98: trailing whitespace.[m
+[32m+[m[32m-rw-r--r-- 1 guitolin guitolin     0 Nov 23 12:22 README.MD[m[41m[7m^M[27m[m[m
+evidencias.log:99: trailing whitespace.[m
+:[K[K[32m+[m[32m-rw-r--r-- 1 guitolin guitolin  6831 Nov 23 13:33 addresses.txt[m[41m[7m^M[27m[m[m
+:[K[K[H[2J[HMevidencias.log:79: trailing whitespace.[m
+[HM[32m+[m[32m 5 files changed, 153 insertions(+), 4 deletions(-)[m[41m[7m^M[27m[m[m
+[HMevidencias.log:78: trailing whitespace.[m
+[HM[32m+[m[32m[7m^M[27m[main 9a18f13] implementei a estrutura da memória virtual e a parte de carregamento do backing store[m[41m[7m^M[27m[m[m
+[HMevidencias.log:77: trailing whitespace.[m
+[HM[32m+[m[32m[7m^M[27muitolin@guitolinnote: ~/gllb[7m^G[27m[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ git commit -m "[7mimplementei a estrutura da memoria virtual e o carregamento do backing store[27m[7m^M[27mimplementei a estrutura da memoria virtual e o car[m[7m>[27m
+[HMevidencias.log:76: trailing whitespace.[m
+[HM[32m+[m[32muitolin@guitolinnote: ~/gllb[7m^G[27m[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ git add evidencias.log main.c makefile vm.c vm.h[m[41m[7m^M[27m[m[m
+[HMevidencias.log:75: trailing whitespace.[m
+[HM[32m+[m[32m[7m^M[27mrm -f vm[m[41m[7m^M[27m[m[m
+[HMevidencias.log:74: trailing whitespace.[m
+[HM[32m+[m[32muitolin@guitolinnote: ~/gllb[7m^G[27m[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ make clean[m[41m[7m^M[27m[m[m
+[HMevidencias.log:73: trailing whitespace.[m
+[14;1H[K:[K[K:[K[K[7mNo next tag  (press RETURN)[27m[14;1H[K[K:[K[K[32m+[m[32m create mode 100644 vm.c[m[41m[7m^M[27m[m[m
+evidencias.log:80: trailing whitespace.[m
+[32m+[m[32muitolin@guitolinnote: ~/gllb[7m^G[27m[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ git push[m[41m[7m^M[27m[m[m
+evidencias.log:81: trailing whitespace.[m
+[32m+[m[32m[7m^M[27mEnumerating objects: 12, done.[m[41m[7m^M[27m[m[m
+evidencias.log:82: trailing whitespace.[m
+[32m+[m[32mCounting objects:   8% (1/12)[7m^M[27mCounting objects:  16% (2/12)[7m^M[27mCounting objects:  25% (3/12)[7m^M[27mCounting objects:  33% (4/12)[7m^M[27mCounting objects:  41% (5/12)[7m^M[27mCounting objects:  50% (6/12)[7m^M[27mCounting objects: [m[7m>[27m
+:[K[K:[K[Kevidencias.log:83: trailing whitespace.[m
+[32m+[m[32mDelta compression using up to 8 threads[m[41m[7m^M[27m[m[m
+evidencias.log:84: trailing whitespace.[m
+[32m+[m[32mCompressing objects:  14% (1/7)[7m^M[27mCompressing objects:  28% (2/7)[7m^M[27mCompressing objects:  42% (3/7)[7m^M[27mCompressing objects:  57% (4/7)[7m^M[27mCompressing objects:  71% (5/7)[7m^M[27mCompressing objects:  85% (6/7)[7m^M[27mCompre[m[7m>[27m
+evidencias.log:85: trailing whitespace.[m
+[32m+[m[32mWriting objects:  14% (1/7)[7m^M[27mWriting objects:  28% (2/7)[7m^M[27mWriting objects:  42% (3/7)[7m^M[27mWriting objects:  57% (4/7)[7m^M[27mWriting objects:  71% (5/7)[7m^M[27mWriting objects:  85% (6/7)[7m^M[27mWriting objects: 100% (7/7)[7m^M[27mW[m[7m>[27m
+evidencias.log:86: trailing whitespace.[m
+[32m+[m[32mTotal 7 (delta 2), reused 0 (delta 0), pack-reused 0[m[41m[7m^M[27m[m[m
+evidencias.log:87: trailing whitespace.[m
+[32m+[m[32mremote: Resolving deltas:   0% (0/2)[7m^M[27mremote: Resolving deltas:  50% (1/2)[7m^M[27mremote: Resolving deltas: 100% (2/2)[7m^M[27mremote: Resolving deltas: 100% (2/2), completed with 2 local objects.[m[41m[7m^M[27m[m[m
+evidencias.log:88: trailing whitespace.[m
+[32m+[m[32mTo https://github.com/Lindemberglb/VM.git[m[41m[7m^M[27m[m[m
+evidencias.log:89: trailing whitespace.[m
+:[K[K[32m+[m[32m   d192d43..9a18f13  main -> main[m[41m[7m^M[27m[m[m
+evidencias.log:90: trailing whitespace.[m
+[32m+[m[32muitolin@guitolinnote: ~/gllb[7m^G[27m[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ git status[m[41m[7m^M[27m[m[m
+evidencias.log:91: trailing whitespace.[m
+[32m+[m[32m[7m^M[27mOn branch main[m[41m[7m^M[27m[m[m
+evidencias.log:92: trailing whitespace.[m
+[32m+[m[32mYour branch is up to date with 'origin/main'.[m[41m[7m^M[27m[m[m
+evidencias.log:93: trailing whitespace.[m
+[32m+[m[41m[7m^M[27m[m[m
+evidencias.log:94: trailing whitespace.[m
+[32m+[m[32mnothing to commit, working tree clean[m[41m[7m^M[27m[m[m
+evidencias.log:95: trailing whitespace.[m
+[32m+[m[32muitolin@guitolinnote: ~/gllb[7m^G[27m[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ ls -l[m[41m[7m^M[27m[m[m
+:[K[Kevidencias.log:96: trailing whitespace.[m
+[32m+[m[32m[7m^M[27mtotal 160[m[41m[7m^M[27m[m[m
+evidencias.log:97: trailing whitespace.[m
+[32m+[m[32m-rw-r--r-- 1 guitolin guitolin 65536 Nov 23 13:33 BACKING_STORE.bin[m[41m[7m^M[27m[m[m
+evidencias.log:98: trailing whitespace.[m
+[32m+[m[32m-rw-r--r-- 1 guitolin guitolin     0 Nov 23 12:22 README.MD[m[41m[7m^M[27m[m[m
+evidencias.log:99: trailing whitespace.[m
+[32m+[m[32m-rw-r--r-- 1 guitolin guitolin  6831 Nov 23 13:33 addresses.txt[m[41m[7m^M[27m[m[m
+evidencias.log:100: trailing whitespace.[m
+[32m+[m[32m-rw-r--r-- 1 guitolin guitolin 64583 Nov 23 13:33 correct.txt[m[41m[7m^M[27m[m[m
+evidencias.log:101: trailing whitespace.[m
+[32m+[m[32m-rw-r--r-- 1 guitolin guitolin  7436 Nov 23 13:55 evidencias.log[m[41m[7m^M[27m[m[m
+evidencias.log:102: trailing whitespace.[m
+:[K[K-[K--[Kcc[Khh[K--[Kcc[Khh[Koo[Kpp[K--[Kll[Koo[Knn[Kgg[K--[Kll[Kii[Knn[Kee[Kss[K[7mFold long lines  (press RETURN)[27m[14;1H[K[K...skipping...
+evidencias.log:96: trailing whitespace.[m
+[32m+[m[32m[7m^M[27mtotal 160[m[41m[7m^M[27m[m[m
+evidencias.log:97: trailing whitespace.[m
+[32m+[m[32m-rw-r--r-- 1 guitolin guitolin 65536 Nov 23 13:33 BACKING_STORE.bin[m[41m[7m^M[27m[m[m
+evidencias.log:98: trailing whitespace.[m
+[32m+[m[32m-rw-r--r-- 1 guitolin guitolin     0 Nov 23 12:22 README.MD[m[41m[7m^M[27m[m[m
+evidencias.log:99: trailing whitespace.[m
+[32m+[m[32m-rw-r--r-- 1 guitolin guitolin  6831 Nov 23 13:33 addresses.txt[m[41m[7m^M[27m[m[m
+evidencias.log:100: trailing whitespace.[m
+[32m+[m[32m-rw-r--r-- 1 guitolin guitolin 64583 Nov 23 13:33 correct.txt[m[41m[7m^M[27m[m[m
+evidencias.log:101: trailing whitespace.[m
+[32m+[m[32m-rw-r--r-- 1 guitolin guitolin  7436 Nov 23 13:55 evidencias.log[m[41m[7m^M[27m[m[m
+evidencias.log:102: trailing whitespace.[m
+:[K[K...skipping...
+evidencias.log:96: trailing whitespace.[m
+[32m+[m[32m[7m^M[27mtotal 160[m[41m[7m^M[27m[m[m
+evidencias.log:97: trailing whitespace.[m
+[32m+[m[32m-rw-r--r-- 1 guitolin guitolin 65536 Nov 23 13:33 BACKING_STORE.bin[m[41m[7m^M[27m[m[m
+evidencias.log:98: trailing whitespace.[m
+[32m+[m[32m-rw-r--r-- 1 guitolin guitolin     0 Nov 23 12:22 README.MD[m[41m[7m^M[27m[m[m
+evidencias.log:99: trailing whitespace.[m
+[32m+[m[32m-rw-r--r-- 1 guitolin guitolin  6831 Nov 23 13:33 addresses.txt[m[41m[7m^M[27m[m[m
+evidencias.log:100: trailing whitespace.[m
+[32m+[m[32m-rw-r--r-- 1 guitolin guitolin 64583 Nov 23 13:33 correct.txt[m[41m[7m^M[27m[m[m
+evidencias.log:101: trailing whitespace.[m
+[32m+[m[32m-rw-r--r-- 1 guitolin guitolin  7436 Nov 23 13:55 evidencias.log[m[41m[7m^M[27m[m[m
+evidencias.log:102: trailing whitespace.[m
+:[K[K[32m+[m[32m-rw-r--r-- 1 guitolin guitolin  4037 Nov 23 13:53 main.c[m[41m[7m^M[27m[m[m
+:[K[Kevidencias.log:103: trailing whitespace.[m
+:[K[K[32m+[m[32m-rw-r--r-- 1 guitolin guitolin   277 Nov 23 13:50 makefile[m[41m[7m^M[27m[m[m
+:[K[Kevidencias.log:104: trailing whitespace.[m
+:[K[K[32m+[m[32m-rw-r--r-- 1 guitolin guitolin  1524 Nov 23 13:46 vm.c[m[41m[7m^M[27m[m[m
+:[K[Kevidencias.log:105: trailing whitespace.[m
+:[K[K[32m+[m[32m-rw-r--r-- 1 guitolin guitolin   738 Nov 23 13:45[m[41m [m[m
+:[K[Kvm.c:116: new blank line at EOF.[m
+:[K[K[K[7m(END)[27m[K[K[K[7m(END)[27m[K[K[K[7m(END)[27m[K[K[K[7m(END)[27m[K[K[K[7m(END)[27m[K[K [KESCESC[KESCESC[K [KESCESC[K^J^J[K[7m(END)[27m[K[K[K[7m(END)[27m[K[H[2J[Hevidencias.log:100: trailing whitespace.[m
+[32m+[m[32m-rw-r--r-- 1 guitolin guitolin 64583 Nov 23 13:33 correct.txt[m[41m[7m^M[27m[m[m
+evidencias.log:101: trailing whitespace.[m
+[32m+[m[32m-rw-r--r-- 1 guitolin guitolin  7436 Nov 23 13:55 evidencias.log[m[41m[7m^M[27m[m[m
+evidencias.log:102: trailing whitespace.[m
+[32m+[m[32m-rw-r--r-- 1 guitolin guitolin  4037 Nov 23 13:53 main.c[m[41m[7m^M[27m[m[m
+evidencias.log:103: trailing whitespace.[m
+[32m+[m[32m-rw-r--r-- 1 guitolin guitolin   277 Nov 23 13:50 makefile[m[41m[7m^M[27m[m[m
+evidencias.log:104: trailing whitespace.[m
+[32m+[m[32m-rw-r--r-- 1 guitolin guitolin  1524 Nov 23 13:46 vm.c[m[41m[7m^M[27m[m[m
+evidencias.log:105: trailing whitespace.[m
+[32m+[m[32m-rw-r--r-- 1 guitolin guitolin   738 Nov 23 13:45[m[41m [m[m
+vm.c:116: new blank line at EOF.[m
+[7m(END)[27m[K[K[H[2J[HMevidencias.log:78: trailing whitespace.[m
+[HM[32m+[m[32m[7m^M[27m[main 9a18f13] implementei a estrutura da memória virtual e a parte de carregamento do backing store[m[41m[7m^M[27m[m[m
+[HMevidencias.log:77: trailing whitespace.[m
+[HM[32m[m[32m[01;32m[00m[01;34m[00mi[7m[27móapdcegamento[7m^G^G^G^G^G^G^G^G[27m"[m[41m[7m^M[27m[m[m
+[HM[32m[m[32m[01;32m[00m[01;34m[00mi[7m[27m[7m^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H[27mó[7m^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H^H[27mapartedecarr[m[HM[32m+[m[32m[7m^M[27muitolin@guitolinnote: ~/gllb[7m^G[27m[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ git commit -m "[7mimplementei a estrutura da memoria virtual e o carregamento do backing store[27m[7m^M[27mimplementei a estrutura da memoria virtual e o carr[m[HMevidencias.log:76: trailing whitespace.[m
+[HM[32m+[m[32muitolin@guitolinnote: ~/gllb[7m^G[27m[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ git add evidencias.log main.c makefile vm.c vm.h[m[41m[7m^M[27m[m[m
+[HMevidencias.log:75: trailing whitespace.[m
+[HM[32m+[m[32m[7m^M[27mrm -f vm[m[41m[7m^M[27m[m[m
+[HMevidencias.log:74: trailing whitespace.[m
+[HM[32m+[m[32muitolin@guitolinnote: ~/gllb[7m^G[27m[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ make clean[m[41m[7m^M[27m[m[m
+[HMevidencias.log:73: trailing whitespace.[m
+[14;1H[K:[K[K:[K[K[7mNo next tag  (press RETURN)[27m[14;1H[K[K:[K[K[32m+[m[32m 5 files changed, 153 insertions(+), 4 deletions(-)[m[41m[7m^M[27m[m[m
+evidencias.log:79: trailing whitespace.[m
+[32m+[m[32m create mode 100644 vm.c[m[41m[7m^M[27m[m[m
+evidencias.log:80: trailing whitespace.[m
+[32m+[m[32muitolin@guitolinnote: ~/gllb[7m^G[27m[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ git push[m[41m[7m^M[27m[m[m
+evidencias.log:81: trailing whitespace.[m
+[32m+[m[32m[7m^M[27mEnumerating objects: 12, done.[m[41m[7m^M[27m[m[m
+:[K[K:[K[Kevidencias.log:82: trailing whitespace.[m
+[32m+[m[32mCounting objects:   8% (1/12)[7m^M[27mCounting objects:  16% (2/12)[7m^M[27mCounting objects:  25% (3/12)[7m^M[27mCounting objects:  33% (4/12)[7m^M[27mCounting objects:  41% (5/12)[7m^M[27mCounting objects:  50% (6/12)[7m^M[27mCounting objects:  [m [32m[m[32m58% (7/12)[7m^M[27mCounting objects:  66% (8/12)[7m^M[27mCounting objects:  75% (9/12)[7m^M[27mCounting objects:  83% (10/12)[7m^M[27mCounting objects:  91% (11/12)[7m^M[27mCounting objects: 100% (12/12)[7m^M[27mCounting objects: 100% (12/12), done[m [32m[m[32m.[m[41m[7m^M[27m[m[m
+evidencias.log:83: trailing whitespace.[m
+[32m+[m[32mDelta compression using up to 8 threads[m[41m[7m^M[27m[m[m
+evidencias.log:84: trailing whitespace.[m
+[32m+[m[32mCompressing objects:  14% (1/7)[7m^M[27mCompressing objects:  28% (2/7)[7m^M[27mCompressing objects:  42% (3/7)[7m^M[27mCompressing objects:  57% (4/7)[7m^M[27mCompressing objects:  71% (5/7)[7m^M[27mCompressing objects:  85% (6/7)[7m^M[27mCompres[m [32m[m[32msing objects: 100% (7/7)[7m^M[27mCompressing objects: 100% (7/7), done.[m[41m[7m^M[27m[m[m
+evidencias.log:85: trailing whitespace.[m
+[32m+[m[32mWriting objects:  14% (1/7)[7m^M[27mWriting objects:  28% (2/7)[7m^M[27mWriting objects:  42% (3/7)[7m^M[27mWriting objects:  57% (4/7)[7m^M[27mWriting objects:  71% (5/7)[7m^M[27mWriting objects:  85% (6/7)[7m^M[27mWriting objects: 100% (7/7)[7m^M[27mWr[m [32m[m[32miting objects: 100% (7/7), 3.12 KiB | 799.00 KiB/s, done.[m[41m[7m^M[27m[m[m
+evidencias.log:86: trailing whitespace.[m
+:[K[K[32m+[m[32mTotal 7 (delta 2), reused 0 (delta 0), pack-reused 0[m[41m[7m^M[27m[m[m
+evidencias.log:87: trailing whitespace.[m
+[32m+[m[32mremote: Resolving deltas:   0% (0/2)[7m^M[27mremote: Resolving deltas:  50% (1/2)[7m^M[27mremote: Resolving deltas: 100% (2/2)[7m^M[27mremote: Resolving deltas: 100% (2/2), completed with 2 local objects.[m[41m[7m^M[27m[m[m
+evidencias.log:88: trailing whitespace.[m
+[32m+[m[32mTo https://github.com/Lindemberglb/VM.git[m[41m[7m^M[27m[m[m
+evidencias.log:89: trailing whitespace.[m
+[32m+[m[32m   d192d43..9a18f13  main -> main[m[41m[7m^M[27m[m[m
+evidencias.log:90: trailing whitespace.[m
+[32m+[m[32muitolin@guitolinnote: ~/gllb[7m^G[27m[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ git status[m[41m[7m^M[27m[m[m
+evidencias.log:91: trailing whitespace.[m
+[32m+[m[32m[7m^M[27mOn branch main[m[41m[7m^M[27m[m[m
+evidencias.log:92: trailing whitespace.[m
+[32m+[m[32mYour branch is up to date with 'origin/main'.[m

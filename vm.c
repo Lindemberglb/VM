@@ -49,3 +49,68 @@ int vm_initialize(VirtualMemory *memory, const char *backing_store_path){
 
     return 1;
 }
+
+int vm_translate(VirtualMemory *memory, int logical_address,TranslationResult *result){
+    if (memory == NULL || result == NULL) {
+        fprintf(stderr, "Erro: parametros invalidos para traducao.\n");
+        return 0;
+    }
+
+    if (logical_address < 0 || logical_address >= BACKING_STORE_SIZE) {
+        fprintf(stderr, "Erro: endereco logico fora do intervalo permitido.\n");
+        return 0;
+    }
+
+    int page_number = logical_address / PAGE_SIZE;
+    int offset = logical_address % PAGE_SIZE;
+
+    PageTableEntry *page_entry = &memory->page_table[page_number];
+
+    int page_fault = 0;
+    int frame_number;
+
+    if (page_entry->valid) {
+        frame_number = page_entry->frame_number;
+
+        if (frame_number < 0 || frame_number >= NUM_FRAMES) {
+            fprintf(stderr, "Erro: quadro fisico invalido na tabela de paginas.\n");
+            return 0;
+        }
+    } else {
+        if (memory->next_free_frame >= NUM_FRAMES) {
+            fprintf(stderr,"Erro: memoria fisica cheia. A substituicao de paginas ainda nao foi implementada.\n");
+            return 0;
+        }
+
+        frame_number = (int)memory->next_free_frame;
+
+        memcpy(memory->physical_memory[frame_number],memory->backing_store + page_number * PAGE_SIZE, PAGE_SIZE);
+
+        page_entry->frame_number = frame_number;
+        page_entry->valid = 1;
+
+        memory->frame_to_page[frame_number] = page_number;
+        memory->next_free_frame++;
+
+        page_fault = 1;
+        memory->page_faults++;
+    }
+
+    memory->access_counter++;
+
+    page_entry->last_used = memory->access_counter;
+
+    if (page_fault) {
+        page_entry->loaded_at = memory->access_counter;
+    }
+
+    result->page_number = page_number;
+    result->offset = offset;
+    result->frame_number = frame_number;
+    result->physical_address = frame_number * PAGE_SIZE + offset;
+    result->value = (int8_t)memory->physical_memory[frame_number][offset];
+    result->page_fault = page_fault;
+
+    return 1;
+}
+
