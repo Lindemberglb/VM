@@ -48,6 +48,7 @@ int vm_initialize(VirtualMemory *memory, const char *backing_store_path);
 int vm_translate(
     VirtualMemory *memory,
     int logical_address,
+    ReplacementAlgorithm page_algorithm,
     TranslationResult *result
 );
 

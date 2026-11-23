@@ -338,4 +338,33 @@ evidencias.log:90: trailing whitespace.[m
 evidencias.log:91: trailing whitespace.[m
 [32m+[m[32m[7m^M[27mOn branch main[m[41m[7m^M[27m[m[m
 evidencias.log:92: trailing whitespace.[m
-[32m+[m[32mYour branch is up to date with 'origin/main'.[m
+[32m+[m[32mYour branch is up to date with 'origin/main'.[mScript started on 2026-11-23 14:12:08-03:00 [TERM="xterm-256color" TTY="/dev/pts/9" COLUMNS="206" LINES="15"]
+[?2004h]0;guitolin@guitolinnote: ~/gllb[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ make clean
+[?2004lrm -f vm
+[?2004h]0;guitolin@guitolinnote: ~/gllb[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ [7m./vm addresses.txt lru fifo[27m./vm addresses.txt lru fifo
+[?2004lbash: ./vm: No such file or directory
+[?2004h]0;guitolin@guitolinnote: ~/gllb[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ make
+[?2004lgcc -std=c11 -Wall -Wextra -Wpedantic -pthread main.c vm.c -o vm -pthread
+[?2004h]0;guitolin@guitolinnote: ~/gllb[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ ./[K[K[7m./vm addresses.txt lru fifo[27m./vm addresses.txt lru fifo
+[?2004l[?2004h]0;guitolin@guitolinnote: ~/gllb[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ make clean
+[?2004lrm -f vm
+[?2004h]0;guitolin@guitolinnote: ~/gllb[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ git ad [Kd main.[K[K[K[K[Kvm.h vm.c evidencias,[K.log
+[?2004l[?2004h]0;guitolin@guitolinnote: ~/gllb[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ git commit -m "[7mimplementei a traducao de enderecos logicos[27mimplementei a traducao de enderecos logicos[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C no vm.c e defin[K[K[K[K[K[K[K[K"[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[1P"[1P"[1P"[1P"[1P"[1P"[1P"[1P"[1P"[1P"[1P"[1P"[1P"[1P"[1P"[1P"[1P"[1P"[1P"[1P"[1P"[1P"[1P"[1P"[1P"[1P"[1P"[1P"[1P"[1P"[1P"[1P"[1P"[1P"[1P"[1P"[1P"[1P"[1P"[1P"[1P"[1P"[1P"[1P"[1P"[1P"[1P"[1P"[1P"[1P"[1P"d"e"f"i"n"i" "a" "t"r"a"d"u"ç"ã"o" "d"e" "e"n"d"e"r"e"ç"o"s" "l"ó"g"i"o"[1P"c"o"s" "n"o" "v"m"."h" "e" "i"m"p"l"e"m"e"n"t"e"i" "n"o" "v"m"."c"[C
+[?2004l[main 4b247e2] defini a tradução de endereços lógicos no vm.h e implementei no vm.c
+ 3 files changed, 353 insertions(+), 1 deletion(-)
+[?2004h]0;guitolin@guitolinnote: ~/gllb[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ git push
+[?2004lEnumerating objects: 9, done.
+Counting objects:  11% (1/9)Counting objects:  22% (2/9)Counting objects:  33% (3/9)Counting objects:  44% (4/9)Counting objects:  55% (5/9)Counting objects:  66% (6/9)Counting objects:  77% (7/9)Counting objects:  88% (8/9)Counting objects: 100% (9/9)Counting objects: 100% (9/9), done.
+Delta compression using up to 8 threads
+Compressing objects:  20% (1/5)Compressing objects:  40% (2/5)Compressing objects:  60% (3/5)Compressing objects:  80% (4/5)Compressing objects: 100% (5/5)Compressing objects: 100% (5/5), done.
+Writing objects:  20% (1/5)Writing objects:  40% (2/5)Writing objects:  60% (3/5)Writing objects:  80% (4/5)Writing objects: 100% (5/5)Writing objects: 100% (5/5), 4.98 KiB | 2.49 MiB/s, done.
+Total 5 (delta 2), reused 0 (delta 0), pack-reused 0
+remote: Resolving deltas:   0% (0/2)[Kremote: Resolving deltas:  50% (1/2)[Kremote: Resolving deltas: 100% (2/2)[Kremote: Resolving deltas: 100% (2/2), completed with 2 local objects.[K
+To https://github.com/Lindemberglb/VM.git
+   9a18f13..4b247e2  main -> main
+[?2004h]0;guitolin@guitolinnote: ~/gllb[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ ls
+[?2004lBACKING_STORE.bin  README.MD  addresses.txt  correct.txt  evidencias.log  main.c  makefile  vm.c  vm.h
+[?2004h]0;guitolin@guitolinnote: ~/gllb[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ ls -l
+[?2004ltotal 192
+-rw-r--r-- 1 guitolin guitolin 65536 Nov 23 13:33 BACKING_STORE.bin
+-rw-r--r-- 1 guitolin guitolin     0 Nov 23 
