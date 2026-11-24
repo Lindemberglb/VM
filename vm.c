@@ -3,6 +3,22 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <pthread.h>
+#include <stdlib.h>
+
+typedef struct {
+    const TLBEntry *entry;
+    int page_number;
+    int matched;
+} TLBSearchTask;
+
+static void *search_tlb_entry(void *argument){
+    TLBSearchTask *task = argument;
+
+    task->matched = task->entry->valid && task->entry->page_number == task->page_number;
+
+    return NULL;
+}
 
 int vm_initialize(VirtualMemory *memory, const char *backing_store_path){
     if (memory == NULL || backing_store_path == NULL) {
@@ -112,10 +128,44 @@ static int select_lru_frame(const VirtualMemory *memory){
     return least_recent_frame;
 }
 
-static int find_tlb_entry(const VirtualMemory *memory, int page_number){
+static int find_tlb_entry_parallel(const VirtualMemory *memory, int page_number){
+    pthread_t threads[TLB_SIZE];
+    TLBSearchTask tasks[TLB_SIZE];
+
+    int created_threads = 0;
+
     for (int index = 0; index < TLB_SIZE; index++) {
-        if (memory->tlb[index].valid &&
-            memory->tlb[index].page_number == page_number) {
+        tasks[index].entry = &memory->tlb[index];
+        tasks[index].page_number = page_number;
+        tasks[index].matched = 0;
+
+        int error = pthread_create(&threads[index],NULL,search_tlb_entry,&tasks[index]);
+
+        if (error != 0) {
+            fprintf(stderr, "Erro: nao foi possivel criar uma thread para a busca na TLB: %s.\n", strerror(error));
+
+            for (int created = 0; created < created_threads; created++) {
+                pthread_join(threads[created], NULL);
+            }
+
+            return -2;
+        }
+
+        created_threads++;
+    }
+
+    for (int index = 0; index < created_threads; index++) {
+        int error = pthread_join(threads[index], NULL);
+
+        if (error != 0) {
+            fprintf(stderr, "Erro: nao foi possivel aguardar uma thread da busca na TLB: %s.\n", strerror(error));
+
+            exit(EXIT_FAILURE);
+        }
+    }
+
+    for (int index = 0; index < TLB_SIZE; index++) {
+        if (tasks[index].matched) {
             return index;
         }
     }
@@ -125,7 +175,7 @@ static int find_tlb_entry(const VirtualMemory *memory, int page_number){
 
 static int select_lru_tlb_entry(const VirtualMemory *memory);
 
-static void insert_tlb_entry(VirtualMemory *memory, int page_number, int frame_number, ReplacementAlgorithm algorithm){
+static int insert_tlb_entry(VirtualMemory *memory, int page_number, int frame_number, ReplacementAlgorithm algorithm){
     int selected_index = -1;
 
     for (int index = 0; index < TLB_SIZE; index++) {
@@ -150,11 +200,16 @@ static void insert_tlb_entry(VirtualMemory *memory, int page_number, int frame_n
         }
     }
 
+    if (selected_index < 0 || selected_index >= TLB_SIZE) {
+        return -1;
+    }
+
     memory->tlb[selected_index].page_number = page_number;
     memory->tlb[selected_index].frame_number = frame_number;
     memory->tlb[selected_index].valid = 1;
     memory->tlb[selected_index].loaded_at = memory->access_counter;
     memory->tlb[selected_index].last_used = memory->access_counter;
+    return selected_index;
 }
 
 static int select_lru_tlb_entry(const VirtualMemory *memory){
@@ -208,7 +263,12 @@ int vm_translate(VirtualMemory *memory, int logical_address, ReplacementAlgorith
     int page_number = logical_address / PAGE_SIZE;
     int offset = logical_address % PAGE_SIZE;
     int page_fault = 0;
-    int tlb_index = find_tlb_entry(memory, page_number);
+    int tlb_index = find_tlb_entry_parallel(memory, page_number);
+
+    if (tlb_index == -2) {
+        return 0;
+    }
+
     int tlb_hit = tlb_index >= 0;
     int frame_number;
 
@@ -284,8 +344,7 @@ int vm_translate(VirtualMemory *memory, int logical_address, ReplacementAlgorith
     }
 
     if (!tlb_hit) {
-        insert_tlb_entry(memory, page_number, frame_number, tlb_algorithm);
-        tlb_index = find_tlb_entry(memory, page_number);
+        tlb_index = insert_tlb_entry(memory, page_number, frame_number, tlb_algorithm);
 
         if (tlb_index < 0) {
             fprintf(stderr, "Erro: falha ao inserir a traducao na TLB.\n");
