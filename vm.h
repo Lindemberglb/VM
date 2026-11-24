@@ -29,6 +29,7 @@ typedef struct {
     int frame_number;
     int valid;
     size_t loaded_at;
+    size_t last_used;
 } TLBEntry;
 
 typedef struct {

@@ -50,6 +50,7 @@ int vm_initialize(VirtualMemory *memory, const char *backing_store_path){
         memory->tlb[entry].frame_number = -1;
         memory->tlb[entry].valid = 0;
         memory->tlb[entry].loaded_at = 0;
+        memory->tlb[entry].last_used = 0;
     }
 
     memory->tlb_hits = 0;
@@ -122,7 +123,9 @@ static int find_tlb_entry(const VirtualMemory *memory, int page_number){
     return -1;
 }
 
-static void insert_tlb_entry(VirtualMemory *memory, int page_number, int frame_number){
+static int select_lru_tlb_entry(const VirtualMemory *memory);
+
+static void insert_tlb_entry(VirtualMemory *memory, int page_number, int frame_number, ReplacementAlgorithm algorithm){
     int selected_index = -1;
 
     for (int index = 0; index < TLB_SIZE; index++) {
@@ -133,14 +136,17 @@ static void insert_tlb_entry(VirtualMemory *memory, int page_number, int frame_n
     }
 
     if (selected_index == -1) {
-        size_t oldest_load = (size_t)-1;
+        if (algorithm == FIFO) {
+            size_t oldest_load = (size_t)-1;
 
-        for (int index = 0; index < TLB_SIZE; index++) {
-            if (selected_index == -1 ||
-                memory->tlb[index].loaded_at < oldest_load) {
-                selected_index = index;
-                oldest_load = memory->tlb[index].loaded_at;
+            for (int index = 0; index < TLB_SIZE; index++) {
+                if (selected_index == -1 || memory->tlb[index].loaded_at < oldest_load) {
+                    selected_index = index;
+                    oldest_load = memory->tlb[index].loaded_at;
+                }
             }
+        } else {
+            selected_index = select_lru_tlb_entry(memory);
         }
     }
 
@@ -148,6 +154,26 @@ static void insert_tlb_entry(VirtualMemory *memory, int page_number, int frame_n
     memory->tlb[selected_index].frame_number = frame_number;
     memory->tlb[selected_index].valid = 1;
     memory->tlb[selected_index].loaded_at = memory->access_counter;
+    memory->tlb[selected_index].last_used = memory->access_counter;
+}
+
+static int select_lru_tlb_entry(const VirtualMemory *memory){
+    int least_recent_index = -1;
+    size_t oldest_access = (size_t)-1;
+
+    for (int index = 0; index < TLB_SIZE; index++) {
+        if (!memory->tlb[index].valid) {
+            continue;
+        }
+
+        if (least_recent_index == -1 ||
+            memory->tlb[index].last_used < oldest_access) {
+            least_recent_index = index;
+            oldest_access = memory->tlb[index].last_used;
+        }
+    }
+
+    return least_recent_index;
 }
 
 static void invalidate_tlb_page(VirtualMemory *memory, int page_number){
@@ -157,6 +183,7 @@ static void invalidate_tlb_page(VirtualMemory *memory, int page_number){
             memory->tlb[index].page_number = -1;
             memory->tlb[index].frame_number = -1;
             memory->tlb[index].loaded_at = 0;
+            memory->tlb[index].last_used = 0;
         }
     }
 }
@@ -168,9 +195,8 @@ int vm_translate(VirtualMemory *memory, int logical_address, ReplacementAlgorith
         return 0;
     }
 
-    if ((page_algorithm != FIFO && page_algorithm != LRU) ||
-        tlb_algorithm != FIFO) {
-        fprintf(stderr, "Erro: algoritmo de substituicao nao implementado nesta etapa.\n");
+    if ((page_algorithm != FIFO && page_algorithm != LRU) || (tlb_algorithm != FIFO && tlb_algorithm != LRU)) {
+        fprintf(stderr, "Erro: algoritmo de substituicao invalido.\n");
         return 0;
     }
 
@@ -199,6 +225,8 @@ int vm_translate(VirtualMemory *memory, int logical_address, ReplacementAlgorith
         }
 
         memory->tlb_hits++;
+        tlb_entry->last_used = memory->access_counter + 1;
+
     } else {
         PageTableEntry *page_entry = &memory->page_table[page_number];
 
@@ -256,7 +284,7 @@ int vm_translate(VirtualMemory *memory, int logical_address, ReplacementAlgorith
     }
 
     if (!tlb_hit) {
-        insert_tlb_entry(memory, page_number, frame_number);
+        insert_tlb_entry(memory, page_number, frame_number, tlb_algorithm);
         tlb_index = find_tlb_entry(memory, page_number);
 
         if (tlb_index < 0) {
