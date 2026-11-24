@@ -25,13 +25,22 @@ typedef struct {
 } PageTableEntry;
 
 typedef struct {
+    int page_number;
+    int frame_number;
+    int valid;
+    size_t loaded_at;
+} TLBEntry;
+
+typedef struct {
     unsigned char physical_memory[NUM_FRAMES][PAGE_SIZE];
     unsigned char backing_store[BACKING_STORE_SIZE];
     PageTableEntry page_table[PAGE_TABLE_SIZE];
+    TLBEntry tlb[TLB_SIZE];
     int frame_to_page[NUM_FRAMES];
     size_t next_free_frame;
     size_t access_counter;
     size_t page_faults;
+    size_t tlb_hits;
 } VirtualMemory;
 
 typedef struct {
@@ -41,6 +50,8 @@ typedef struct {
     int physical_address;
     int8_t value;
     int page_fault;
+    int tlb_index;
+    int tlb_hit;
 } TranslationResult;
 
 int vm_initialize(VirtualMemory *memory, const char *backing_store_path);
@@ -49,7 +60,9 @@ int vm_translate(
     VirtualMemory *memory,
     int logical_address,
     ReplacementAlgorithm page_algorithm,
+    ReplacementAlgorithm tlb_algorithm,
     TranslationResult *result
 );
 
 #endif
+

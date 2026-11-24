@@ -45,6 +45,15 @@ int vm_initialize(VirtualMemory *memory, const char *backing_store_path){
         memory->frame_to_page[frame] = -1;
     }
 
+    for (int entry = 0; entry < TLB_SIZE; entry++) {
+        memory->tlb[entry].page_number = -1;
+        memory->tlb[entry].frame_number = -1;
+        memory->tlb[entry].valid = 0;
+        memory->tlb[entry].loaded_at = 0;
+    }
+
+    memory->tlb_hits = 0;
+
     memory->next_free_frame = 0;
 
     return 1;
@@ -102,14 +111,66 @@ static int select_lru_frame(const VirtualMemory *memory){
     return least_recent_frame;
 }
 
-int vm_translate(VirtualMemory *memory, int logical_address, ReplacementAlgorithm page_algorithm, TranslationResult *result){
+static int find_tlb_entry(const VirtualMemory *memory, int page_number){
+    for (int index = 0; index < TLB_SIZE; index++) {
+        if (memory->tlb[index].valid &&
+            memory->tlb[index].page_number == page_number) {
+            return index;
+        }
+    }
+
+    return -1;
+}
+
+static void insert_tlb_entry(VirtualMemory *memory, int page_number, int frame_number){
+    int selected_index = -1;
+
+    for (int index = 0; index < TLB_SIZE; index++) {
+        if (!memory->tlb[index].valid) {
+            selected_index = index;
+            break;
+        }
+    }
+
+    if (selected_index == -1) {
+        size_t oldest_load = (size_t)-1;
+
+        for (int index = 0; index < TLB_SIZE; index++) {
+            if (selected_index == -1 ||
+                memory->tlb[index].loaded_at < oldest_load) {
+                selected_index = index;
+                oldest_load = memory->tlb[index].loaded_at;
+            }
+        }
+    }
+
+    memory->tlb[selected_index].page_number = page_number;
+    memory->tlb[selected_index].frame_number = frame_number;
+    memory->tlb[selected_index].valid = 1;
+    memory->tlb[selected_index].loaded_at = memory->access_counter;
+}
+
+static void invalidate_tlb_page(VirtualMemory *memory, int page_number){
+    for (int index = 0; index < TLB_SIZE; index++) {
+        if (memory->tlb[index].valid && memory->tlb[index].page_number == page_number) {
+            memory->tlb[index].valid = 0;
+            memory->tlb[index].page_number = -1;
+            memory->tlb[index].frame_number = -1;
+            memory->tlb[index].loaded_at = 0;
+        }
+    }
+}
+
+
+int vm_translate(VirtualMemory *memory, int logical_address, ReplacementAlgorithm page_algorithm, ReplacementAlgorithm tlb_algorithm, TranslationResult *result){
     if (memory == NULL || result == NULL) {
         fprintf(stderr, "Erro: parametros invalidos para traducao.\n");
         return 0;
     }
 
-    if (page_algorithm != FIFO && page_algorithm != LRU) {
-        fprintf(stderr, "Erro: algoritmo de substituicao invalido.\n");
+    if ((page_algorithm != FIFO && page_algorithm != LRU) ||
+        tlb_algorithm != FIFO) {
+        fprintf(stderr, "Erro: algoritmo de substituicao nao implementado nesta etapa.\n");
         return 0;
     }
 
@@ -120,66 +181,88 @@ int vm_translate(VirtualMemory *memory, int logical_address, ReplacementAlgorith
 
     int page_number = logical_address / PAGE_SIZE;
     int offset = logical_address % PAGE_SIZE;
-
-    PageTableEntry *page_entry = &memory->page_table[page_number];
-
     int page_fault = 0;
+    int tlb_index = find_tlb_entry(memory, page_number);
+    int tlb_hit = tlb_index >= 0;
     int frame_number;
 
-    if (page_entry->valid) {
-        frame_number = page_entry->frame_number;
+    if (tlb_hit) {
+        TLBEntry *tlb_entry = &memory->tlb[tlb_index];
+        frame_number = tlb_entry->frame_number;
 
         if (frame_number < 0 || frame_number >= NUM_FRAMES ||
+            !memory->page_table[page_number].valid ||
+            memory->page_table[page_number].frame_number != frame_number ||
             memory->frame_to_page[frame_number] != page_number) {
-            fprintf(stderr, "Erro: mapeamento inconsistente na tabela de paginas.\n");
+            fprintf(stderr, "Erro: mapeamento inconsistente na TLB.\n");
             return 0;
         }
-    } else {
-        if (memory->next_free_frame < NUM_FRAMES) {
-            frame_number = (int)memory->next_free_frame;
-            memory->next_free_frame++;
-        } else {
-            if (page_algorithm == FIFO) {
-                frame_number = select_fifo_frame(memory);
-            } else {
-                frame_number = select_lru_frame(memory);
-            }
 
-            if (frame_number < 0) {
-                fprintf(stderr,"Erro: nao foi possivel selecionar um quadro para substituicao.\n");
+        memory->tlb_hits++;
+    } else {
+        PageTableEntry *page_entry = &memory->page_table[page_number];
+
+        if (page_entry->valid) {
+            frame_number = page_entry->frame_number;
+
+            if (frame_number < 0 || frame_number >= NUM_FRAMES ||
+                memory->frame_to_page[frame_number] != page_number) {
+                fprintf(stderr, "Erro: mapeamento inconsistente na tabela de paginas.\n");
                 return 0;
             }
+        } else {
+            if (memory->next_free_frame < NUM_FRAMES) {
+                frame_number = (int)memory->next_free_frame;
+                memory->next_free_frame++;
+            } else {
+                if (page_algorithm == FIFO) {
+                    frame_number = select_fifo_frame(memory);
+                } else {
+                    frame_number = select_lru_frame(memory);
+                }
 
-            int old_page = memory->frame_to_page[frame_number];
-            PageTableEntry *old_entry = &memory->page_table[old_page];
+                if (frame_number < 0) {
+                    fprintf(stderr, "Erro: nao foi possivel selecionar um quadro para substituicao.\n");
+                    return 0;
+                }
 
-            old_entry->valid = 0;
-            old_entry->frame_number = -1;
-            old_entry->loaded_at = 0;
-            old_entry->last_used = 0;
+                int old_page = memory->frame_to_page[frame_number];
+                PageTableEntry *old_entry = &memory->page_table[old_page];
+
+                invalidate_tlb_page(memory, old_page);
+
+                old_entry->valid = 0;
+                old_entry->frame_number = -1;
+                old_entry->loaded_at = 0;
+                old_entry->last_used = 0;
+            }
+
+            memcpy(memory->physical_memory[frame_number],memory->backing_store + page_number * PAGE_SIZE, PAGE_SIZE);
+
+            memory->frame_to_page[frame_number] = page_number;
+            page_entry->frame_number = frame_number;
+            page_entry->valid = 1;
+
+            page_fault = 1;
+            memory->page_faults++;
         }
-
-        memcpy(
-            memory->physical_memory[frame_number],
-            memory->backing_store + page_number * PAGE_SIZE,
-            PAGE_SIZE
-        );
-
-        memory->frame_to_page[frame_number] = page_number;
-
-        page_entry->frame_number = frame_number;
-        page_entry->valid = 1;
-
-        page_fault = 1;
-        memory->page_faults++;
     }
 
     memory->access_counter++;
-
-    page_entry->last_used = memory->access_counter;
+    memory->page_table[page_number].last_used = memory->access_counter;
 
     if (page_fault) {
-        page_entry->loaded_at = memory->access_counter;
+        memory->page_table[page_number].loaded_at = memory->access_counter;
+    }
+
+    if (!tlb_hit) {
+        insert_tlb_entry(memory, page_number, frame_number);
+        tlb_index = find_tlb_entry(memory, page_number);
+
+        if (tlb_index < 0) {
+            fprintf(stderr, "Erro: falha ao inserir a traducao na TLB.\n");
+            return 0;
+        }
     }
 
     result->page_number = page_number;
@@ -188,7 +271,8 @@ int vm_translate(VirtualMemory *memory, int logical_address, ReplacementAlgorith
     result->physical_address = frame_number * PAGE_SIZE + offset;
     result->value = (int8_t)memory->physical_memory[frame_number][offset];
     result->page_fault = page_fault;
+    result->tlb_index = tlb_index;
+    result->tlb_hit = tlb_hit;
 
     return 1;
 }
-
