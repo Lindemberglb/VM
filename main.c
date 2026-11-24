@@ -1,10 +1,11 @@
-
 #include "vm.h"
 
 #include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#define OUTPUT_FILE "correct.txt"
 
 static int parse_algorithm(const char *argument, ReplacementAlgorithm *algorithm){
     if (strcmp(argument, "fifo") == 0) {
@@ -22,6 +23,7 @@ static int parse_algorithm(const char *argument, ReplacementAlgorithm *algorithm
 
 static int load_addresses(const char *filename, int **addresses, size_t *count){
     FILE *file = fopen(filename, "r");
+
     if (file == NULL) {
         fprintf(stderr, "Erro: nao foi possivel abrir o arquivo '%s'.\n", filename);
         return 0;
@@ -72,7 +74,11 @@ static int load_addresses(const char *filename, int **addresses, size_t *count){
 
         if (total == capacity) {
             size_t new_capacity = capacity == 0 ? 16 : capacity * 2;
-            int *resized_addresses = realloc(loaded_addresses, new_capacity * sizeof(*loaded_addresses));
+
+            int *resized_addresses = realloc(
+                loaded_addresses,
+                new_capacity * sizeof(*loaded_addresses)
+            );
 
             if (resized_addresses == NULL) {
                 fprintf(stderr, "Erro: memoria insuficiente para carregar os enderecos.\n");
@@ -106,12 +112,18 @@ static int load_addresses(const char *filename, int **addresses, size_t *count){
 
     *addresses = loaded_addresses;
     *count = total;
+
     return 1;
 }
 
 int main(int argc, char *argv[]){
     if (argc != 4) {
-        fprintf(stderr, "Uso: %s <arquivo_de_enderecos> <fifo|lru para paginas> <fifo|lru para TLB>\n", argv[0]);
+        fprintf(
+            stderr,
+            "Uso: %s <arquivo_de_enderecos> <fifo|lru para paginas> <fifo|lru para TLB>\n",
+            argv[0]
+        );
+
         return EXIT_FAILURE;
     }
 
@@ -119,12 +131,20 @@ int main(int argc, char *argv[]){
     ReplacementAlgorithm tlb_algorithm;
 
     if (!parse_algorithm(argv[2], &page_algorithm)) {
-        fprintf(stderr, "Erro: algoritmo de substituicao de paginas invalido. Use 'fifo' ou 'lru'.\n");
+        fprintf(
+            stderr,
+            "Erro: algoritmo de substituicao de paginas invalido. Use 'fifo' ou 'lru'.\n"
+        );
+
         return EXIT_FAILURE;
     }
 
     if (!parse_algorithm(argv[3], &tlb_algorithm)) {
-        fprintf(stderr, "Erro: algoritmo de substituicao da TLB invalido. Use 'fifo' ou 'lru'.\n");
+        fprintf(
+            stderr,
+            "Erro: algoritmo de substituicao da TLB invalido. Use 'fifo' ou 'lru'.\n"
+        );
+
         return EXIT_FAILURE;
     }
 
@@ -142,10 +162,84 @@ int main(int argc, char *argv[]){
         return EXIT_FAILURE;
     }
 
-    (void)page_algorithm;
-    (void)tlb_algorithm;
-    (void)address_count;
+    FILE *output = fopen(OUTPUT_FILE, "w");
+
+    if (output == NULL) {
+        fprintf(
+            stderr,
+            "Erro: nao foi possivel criar o arquivo '%s': %s.\n",
+            OUTPUT_FILE,
+            strerror(errno)
+        );
+
+        free(addresses);
+        return EXIT_FAILURE;
+    }
+
+    int success = 1;
+
+    for (size_t index = 0; index < address_count; index++) {
+        TranslationResult result;
+
+        if (!vm_translate(
+                &memory,
+                addresses[index],
+                page_algorithm,
+                tlb_algorithm,
+                &result
+            )) {
+            success = 0;
+            break;
+        }
+
+        int write_result = fprintf(
+            output,
+            "Virtual address: %d TLB: %d Physical address: %d Value: %d\n",
+            addresses[index],
+            result.tlb_index,
+            result.physical_address,
+            result.value
+        );
+
+        if (write_result < 0) {
+            fprintf(stderr, "Erro: falha ao escrever uma traducao no arquivo '%s'.\n", OUTPUT_FILE);
+            success = 0;
+            break;
+        }
+    }
+
+    if (success) {
+        double page_fault_rate = (double)memory.page_faults / address_count;
+        double tlb_hit_rate = (double)memory.tlb_hits / address_count;
+
+        if (fprintf(
+                output,
+                "Number of Translated Addresses = %zu\n"
+                "Page Faults = %zu\n"
+                "Page Fault Rate = %.3f\n"
+                "TLB Hits = %zu\n"
+                "TLB Hit Rate = %.3f\n",
+                address_count,
+                memory.page_faults,
+                page_fault_rate,
+                memory.tlb_hits,
+                tlb_hit_rate
+            ) < 0) {
+            fprintf(stderr, "Erro: falha ao escrever as estatisticas no arquivo '%s'.\n", OUTPUT_FILE);
+            success = 0;
+        }
+    }
+
+    if (fclose(output) != 0) {
+        fprintf(stderr, "Erro: falha ao fechar o arquivo '%s'.\n", OUTPUT_FILE);
+        success = 0;
+    }
 
     free(addresses);
+
+    if (!success) {
+        return EXIT_FAILURE;
+    }
+
     return EXIT_SUCCESS;
 }
