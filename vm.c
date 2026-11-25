@@ -19,8 +19,12 @@ static void *search_tlb_entry(void *argument){
     return NULL;
 }
 
-int vm_initialize(VirtualMemory *memory, const char *backing_store_path){
-    if (memory == NULL || backing_store_path == NULL) {
+int vm_initialize(VirtualMemory *memory,const char *backing_store_path,size_t frame_count,int tlb_enabled,int threaded_tlb){
+    if (memory == NULL || backing_store_path == NULL ||
+        frame_count == 0 || frame_count > MAX_FRAMES ||
+        (tlb_enabled != 0 && tlb_enabled != 1) ||
+        (threaded_tlb != 0 && threaded_tlb != 1) ||
+        (!tlb_enabled && threaded_tlb)) {
         fprintf(stderr, "Erro: parametros invalidos ao inicializar a memoria virtual.\n");
         return 0;
     }
@@ -49,6 +53,10 @@ int vm_initialize(VirtualMemory *memory, const char *backing_store_path){
         return 0;
     }
 
+    memory->frame_count = frame_count;
+    memory->tlb_enabled = tlb_enabled;
+    memory->threaded_tlb = threaded_tlb;
+
     for (int page = 0; page < PAGE_TABLE_SIZE; page++) {
         memory->page_table[page].frame_number = -1;
         memory->page_table[page].valid = 0;
@@ -56,7 +64,7 @@ int vm_initialize(VirtualMemory *memory, const char *backing_store_path){
         memory->page_table[page].last_used = 0;
     }
 
-    for (int frame = 0; frame < NUM_FRAMES; frame++) {
+    for (int frame = 0; frame < MAX_FRAMES; frame++) {
         memory->frame_to_page[frame] = -1;
     }
 
@@ -79,7 +87,7 @@ static int select_fifo_frame(const VirtualMemory *memory){
     int oldest_frame = -1;
     size_t oldest_load = (size_t)-1;
 
-    for (int frame = 0; frame < NUM_FRAMES; frame++) {
+    for (size_t frame = 0; frame < memory->frame_count; frame++) {
         int page_number = memory->frame_to_page[frame];
 
         if (page_number < 0 || page_number >= PAGE_TABLE_SIZE) {
@@ -88,7 +96,7 @@ static int select_fifo_frame(const VirtualMemory *memory){
 
         const PageTableEntry *entry = &memory->page_table[page_number];
 
-        if (!entry->valid || entry->frame_number != frame) {
+        if (!entry->valid || entry->frame_number != (int)frame) {
             return -1;
         }
 
@@ -105,7 +113,7 @@ static int select_lru_frame(const VirtualMemory *memory){
     int least_recent_frame = -1;
     size_t oldest_access = (size_t)-1;
 
-    for (int frame = 0; frame < NUM_FRAMES; frame++) {
+    for (size_t frame = 0; frame < memory->frame_count; frame++) {
         int page_number = memory->frame_to_page[frame];
 
         if (page_number < 0 || page_number >= PAGE_TABLE_SIZE) {
@@ -114,7 +122,7 @@ static int select_lru_frame(const VirtualMemory *memory){
 
         const PageTableEntry *entry = &memory->page_table[page_number];
 
-        if (!entry->valid || entry->frame_number != frame) {
+        if (!entry->valid || entry->frame_number != (int)frame) {
             return -1;
         }
 
@@ -165,6 +173,17 @@ static int find_tlb_entry_parallel(const VirtualMemory *memory, int page_number)
 
     for (int index = 0; index < TLB_SIZE; index++) {
         if (tasks[index].matched) {
+            return index;
+        }
+    }
+
+    return -1;
+}
+
+static int find_tlb_entry_serial(const VirtualMemory *memory, int page_number){
+    for (int index = 0; index < TLB_SIZE; index++) {
+        if (memory->tlb[index].valid &&
+            memory->tlb[index].page_number == page_number) {
             return index;
         }
     }
@@ -262,7 +281,13 @@ int vm_translate(VirtualMemory *memory, int logical_address, ReplacementAlgorith
     int page_number = logical_address / PAGE_SIZE;
     int offset = logical_address % PAGE_SIZE;
     int page_fault = 0;
-    int tlb_index = find_tlb_entry_parallel(memory, page_number);
+    int tlb_index = -1;
+
+    if (memory->tlb_enabled) {
+        tlb_index = memory->threaded_tlb
+            ? find_tlb_entry_parallel(memory, page_number)
+            : find_tlb_entry_serial(memory, page_number);
+    }
 
     if (tlb_index == -2) {
         return 0;
@@ -275,7 +300,7 @@ int vm_translate(VirtualMemory *memory, int logical_address, ReplacementAlgorith
         TLBEntry *tlb_entry = &memory->tlb[tlb_index];
         frame_number = tlb_entry->frame_number;
 
-        if (frame_number < 0 || frame_number >= NUM_FRAMES ||
+        if (frame_number < 0 || (size_t)frame_number >= memory->frame_count ||
             !memory->page_table[page_number].valid ||
             memory->page_table[page_number].frame_number != frame_number ||
             memory->frame_to_page[frame_number] != page_number) {
@@ -292,13 +317,13 @@ int vm_translate(VirtualMemory *memory, int logical_address, ReplacementAlgorith
         if (page_entry->valid) {
             frame_number = page_entry->frame_number;
 
-            if (frame_number < 0 || frame_number >= NUM_FRAMES ||
+            if (frame_number < 0 || (size_t)frame_number >= memory->frame_count ||
                 memory->frame_to_page[frame_number] != page_number) {
                 fprintf(stderr, "Erro: mapeamento inconsistente na tabela de paginas.\n");
                 return 0;
             }
         } else {
-            if (memory->next_free_frame < NUM_FRAMES) {
+            if (memory->next_free_frame < memory->frame_count) {
                 frame_number = (int)memory->next_free_frame;
                 memory->next_free_frame++;
             } else {
@@ -342,7 +367,7 @@ int vm_translate(VirtualMemory *memory, int logical_address, ReplacementAlgorith
         memory->page_table[page_number].loaded_at = memory->access_counter;
     }
 
-    if (!tlb_hit) {
+    if (memory->tlb_enabled && !tlb_hit) {
         tlb_index = insert_tlb_entry(memory, page_number, frame_number, tlb_algorithm);
 
         if (tlb_index < 0) {

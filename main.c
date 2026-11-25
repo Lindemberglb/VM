@@ -117,12 +117,8 @@ static int load_addresses(const char *filename, int **addresses, size_t *count){
 }
 
 int main(int argc, char *argv[]){
-    if (argc != 4) {
-        fprintf(
-            stderr,
-            "Uso: %s <arquivo_de_enderecos> <fifo|lru para paginas> <fifo|lru para TLB>\n",
-            argv[0]
-        );
+    if (argc < 4) {
+        fprintf(stderr,"Uso: %s <arquivo_de_enderecos> <fifo|lru para paginas> ""<fifo|lru para TLB> [--frames 128|256] [--no-tlb | --serial-tlb]\n",argv[0]);
 
         return EXIT_FAILURE;
     }
@@ -148,6 +144,63 @@ int main(int argc, char *argv[]){
         return EXIT_FAILURE;
     }
 
+    size_t frame_count = NUM_FRAMES;
+    int tlb_enabled = 1;
+    int threaded_tlb = 1;
+    int frames_option_seen = 0;
+    int no_tlb_option_seen = 0;
+    int serial_tlb_option_seen = 0;
+
+    for (int index = 4; index < argc; index++) {
+        if (strcmp(argv[index], "--frames") == 0) {
+            if (frames_option_seen || index + 1 >= argc) {
+                fprintf(stderr, "Erro: informe --frames uma unica vez com o valor 128 ou 256.\n");
+                return EXIT_FAILURE;
+            }
+
+            const char *frame_argument = argv[++index];
+            errno = 0;
+            char *end = NULL;
+            long parsed_frame_count = strtol(frame_argument, &end, 10);
+
+            if (frame_argument == end || *end != '\0' || errno == ERANGE ||
+                (parsed_frame_count != NUM_FRAMES && parsed_frame_count != MAX_FRAMES)) {
+                fprintf(stderr, "Erro: o numero de frames deve ser 128 ou 256.\n");
+                return EXIT_FAILURE;
+            }
+
+            frame_count = (size_t)parsed_frame_count;
+            frames_option_seen = 1;
+
+        } else if (strcmp(argv[index], "--no-tlb") == 0) {
+            if (no_tlb_option_seen) {
+                fprintf(stderr, "Erro: a opcao --no-tlb pode ser informada apenas uma vez.\n");
+                return EXIT_FAILURE;
+            }
+
+            tlb_enabled = 0;
+            threaded_tlb = 0;
+            no_tlb_option_seen = 1;
+
+        } else if (strcmp(argv[index], "--serial-tlb") == 0) {
+            if (serial_tlb_option_seen) {
+                fprintf(stderr, "Erro: a opcao --serial-tlb pode ser informada apenas uma vez.\n");
+                return EXIT_FAILURE;
+            }
+
+            threaded_tlb = 0;
+            serial_tlb_option_seen = 1;
+        } else {
+            fprintf(stderr, "Erro: opcao desconhecida '%s'.\n", argv[index]);
+            return EXIT_FAILURE;
+        }
+    }
+
+    if (!tlb_enabled && serial_tlb_option_seen) {
+        fprintf(stderr, "Erro: --serial-tlb nao pode ser combinado com --no-tlb.\n");
+        return EXIT_FAILURE;
+    }
+
     int *addresses = NULL;
     size_t address_count = 0;
 
@@ -157,7 +210,7 @@ int main(int argc, char *argv[]){
 
     VirtualMemory memory;
 
-    if (!vm_initialize(&memory, BACKING_STORE_FILE)) {
+    if (!vm_initialize(&memory,BACKING_STORE_FILE,frame_count,tlb_enabled,threaded_tlb)) {
         free(addresses);
         return EXIT_FAILURE;
     }

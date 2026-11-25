@@ -367,4 +367,21 @@ To https://github.com/Lindemberglb/VM.git
 [?2004h]0;guitolin@guitolinnote: ~/gllb[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ ls -l
 [?2004ltotal 192
 -rw-r--r-- 1 guitolin guitolin 65536 Nov 23 13:33 BACKING_STORE.bin
--rw-r--r-- 1 guitolin guitolin     0 Nov 23 
+-rw-r--r-- 1 guitolin guitolin     0 Nov 23 Script started on 2026-11-24 21:22:28-03:00 [TERM="xterm-256color" TTY="/dev/pts/9" COLUMNS="132" LINES="8"]
+[?2004h]0;guitolin@guitolinnote: ~/gllb[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ make clean]
+[?2004lmake: *** No rule to make target 'clean]'.  Stop.
+[?2004h]0;guitolin@guitolinnote: ~/gllb[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ make clean
+[?2004lrm -f vm
+[?2004h]0;guitolin@guitolinnote: ~/gllb[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ maek[K[Kke
+[?2004lgcc -std=c11 -Wall -Wextra -Wpedantic -pthread main.c vm.c -o vm -pthread
+[?2004h]0;guitolin@guitolinnote: ~/gllb[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ [7m./vm addresses.txt fifo fifo --no-tlb --frames 256[27m[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C./vm addresses.txt fifo fifo --no-tlb --frames 256
+[?2004l[?2004h]0;guitolin@guitolinnote: ~/gllb[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ [7m./vm addresses.txt fifo fifo --no-tlb[27m[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C./vm addresses.txt fifo fifo --no-tlb
+[?2004l[?2004h]0;guitolin@guitolinnote: ~/gllb[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ [7m./vm addresses.txt lru fifo --no-tlb[27m[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C./vm addresses.txt lru fifo --no-tlb
+[?2004l[?2004h]0;guitolin@guitolinnote: ~/gllb[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ [7m./vm addresses.txt lru fifo --serial-tlb[27m[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C./vm addresses.txt lru fifo --serial-tlb
+[?2004l[?2004h]0;guitolin@guitolinnote: ~/gllb[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ [7m./vm addresses.txt lru lru --serial-tlb[27m[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C[C./vm addresses.txt lru lru --serial-tlb
+[?2004l[?2004h]0;guitolin@guitolinnote: ~/gllb[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ make clean
+[?2004lrm -f vm
+[?2004h]0;guitolin@guitolinnote: ~/gllb[01;32mguitolin@guitolinnote[00m:[01;34m~/gllb[00m$ exit
+[?2004lexit
+
+Script done on 2026-11-24 21:23:41-03:00 [COMMAND_EXIT_CODE="0"]
